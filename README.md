@@ -2,8 +2,6 @@
 
 An end-to-end equity research project on **FormFactor**, a U.S. leader in semiconductor wafer probe cards, built as a hands-on exercise in financial data engineering and analysis: pulling raw filings from the SEC, cleaning them, modeling them in SQL, and turning the numbers into an investment view.
 
-> Notebooks are written with explanations in Traditional Chinese; code, SQL, and charts are in English.
-
 **Author:** Chen-Chih (Cosby) Hung — MS in Business Analytics candidate, University of Illinois Urbana-Champaign
 
 ---
@@ -33,7 +31,7 @@ SEC EDGAR API ──► raw JSON ──► clean long table ──► CSV ──
 ├── 01_extract_clean.ipynb      Step 1  Pull FormFactor XBRL data from SEC, clean, export CSV
 ├── 02_sql_analysis.ipynb       Step 2  Load into SQLite, compute financial ratios with SQL
 ├── 03_peer_comparison.ipynb    Step 3a Peer benchmarking vs Teradyne, Cohu, Onto Innovation, Kulicke & Soffa
-├── 04_market_structure.ipynb   Step 3b Revenue mix, probe-card market share, customers, supply chain
+├── 04_market_structure.ipynb   Step 3b Revenue mix, segment margins, probe-card market share, supply chain
 ├── sec_etl.py                  Reusable ETL functions (fetch → flatten → clean → map → derive)
 ├── data/
 │   ├── clean/                  Cleaned financial statements (long and wide CSV)
@@ -49,7 +47,7 @@ pip install -r requirements.txt
 jupyter notebook
 ```
 
-Run the notebooks in order (01 → 04). The SEC requires a `User-Agent` header with your name and email; set it in the `HEADERS` line of notebooks 01 and 03. Raw SEC responses are cached in `data/raw/` and the SQLite database is rebuilt by the notebooks, so neither is committed.
+Run the notebooks in order (01 → 04). The SEC requires a `User-Agent` header with a name and email; replace the `HEADERS` value in notebooks 01 and 03 with your own. Raw SEC responses are cached in `data/raw/` and the SQLite database is rebuilt by the notebooks, so neither is committed.
 
 ## Key findings
 
@@ -70,21 +68,24 @@ GAAP net income rose 62% in 2023 while revenue fell 11%. The gap was a $73.0M ga
 | Cohu | 45.2% | 2.3% | 15.4% | 2.6% | 7.1% |
 | **FormFactor** | **40.0%** | **7.5%** | **15.2%** | **8.8%** | **6.3%** |
 
-**4. FormFactor is losing share to direct probe-card competitors, who are also more profitable.**
-Converted to USD, Technoprobe's 2025 revenue ($709M) exceeded FormFactor's probe-card segment ($638M). In 2025 FormFactor's probe-card revenue grew 1.9% versus 16% (Technoprobe), 26% (Micronics Japan) and 33% (Chunghwa Precision Test) in local currency. Technoprobe and Micronics Japan earned 16–17% net margins versus 6.9% at FormFactor, so the low margin is company-specific rather than structural to the industry.
+**4. FormFactor is losing share to direct probe-card competitors, who are far more profitable.**
+Converted to USD, Technoprobe's 2025 revenue ($709M) exceeded FormFactor's probe-card segment ($638M). In 2025 FormFactor's probe-card revenue grew 1.9% versus 15.7% (Technoprobe), 26.1% (Micronics Japan) and 33.3% (Chunghwa Precision Test) in local currency. Micronics Japan's operating margin (23.6%) and Technoprobe's EBITDA margin (32.1%) compare with 7.3% at FormFactor, so the margin gap is company-specific rather than structural to the industry.
 
-**5. DRAM / HBM is becoming the growth engine.**
-DRAM rose from 29.8% of revenue in 2024 to 34.3% in the twelve months to June 2026, and SK hynix became the largest customer (about 22.9% of 2025 revenue).
+**5. DRAM / HBM drives growth, but at lower margins.**
+DRAM grew from $114M (17.2% of revenue) in 2023 to $309M (34.3%) in the twelve months to June 2026, driven by high-bandwidth memory for AI. Yet probe-card gross margin stayed around 40% (40.5% in 2025): management states DRAM products carry lower margins than Foundry & Logic, and tariffs raised U.S. manufacturing costs. The largest customer accounted for 22.9% of 2025 revenue.
 
 <p align="center">
-  <img src="data/analysis/peer_revenue_index.png" width="48%">
-  <img src="data/analysis/peer_margins_5yr.png" width="48%">
+  <img src="data/analysis/peer_margins_5yr.png" width="100%">
+</p>
+<p align="center">
+  <img src="data/analysis/form_revenue_by_market.png" width="48%">
+  <img src="data/analysis/probe_card_revenue_usd.png" width="48%">
 </p>
 
 ## Data sources
 
 - SEC EDGAR XBRL `companyfacts` API — FormFactor, Teradyne, Cohu, Onto Innovation, Kulicke & Soffa
-- FormFactor 10-K (FY2025), 10-Q (six months ended July 1, 2023) and Q4 2023 / Q4 2025 earnings releases
+- FormFactor 10-K (FY2023, FY2025), 10-Q (six months ended July 1, 2023) and Q4 2023 / Q4 2025 earnings releases
 - Technoprobe FY2025 results release; Micronics Japan FY2025 consolidated results; Chunghwa Precision Test 2025 revenue (Economic Daily News)
 - IRS yearly average currency exchange rates
 - Mordor Intelligence probe card market report (market size estimate)

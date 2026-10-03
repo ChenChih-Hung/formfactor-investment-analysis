@@ -1,12 +1,13 @@
 """
-sec_etl.py — 把 Step 1 notebook 的流程包裝成可重複使用的函數
+sec_etl.py — reusable ETL for SEC EDGAR XBRL "companyfacts" data.
 
-用法：
+Packages the step-by-step logic of notebook 01 into functions so the same
+pipeline can be applied to any U.S.-listed company:
+
     import sec_etl
     long_df, report = sec_etl.build_company("FORM", "1039399", HEADERS)
 
-Step 1 是「一步一步看懂」；這個檔案是「看懂之後，包起來重複用」。
-同樣的程式碼要套用到 5 家公司時，寫成函數就不用複製貼上 5 次。
+Pipeline: fetch (with local cache) -> flatten -> clean -> map XBRL tags to metrics -> derive missing metrics.
 """
 import json
 import time
@@ -15,15 +16,15 @@ from pathlib import Path
 import pandas as pd
 import requests
 
-# 指標 → (報表, [候選 XBRL 標籤，依優先順序])
-# 比 Step 1 多加了幾個營收標籤，因為不同公司用不同的標籤
+# metric -> (statement, [candidate XBRL tags in priority order])
+# Companies (and years) use different tags for the same line item, so each metric has fallbacks.
 METRICS = {
-    # ---- 損益表 ----
+    # ---- Income statement ----
     "revenue":            ("IS", ["RevenueFromContractWithCustomerExcludingAssessedTax", "Revenues",
                                   "RevenueFromContractWithCustomerIncludingAssessedTax",
                                   "SalesRevenueNet", "SalesRevenueGoodsNet"]),
     "cost_of_revenue":    ("IS", ["CostOfRevenue", "CostOfGoodsAndServicesSold", "CostOfGoodsSold",
-                                  # Cohu 2021 年起改用這個標籤：成本「不含折舊攤提」，毛利率會略為偏高
+                                  # Used by Cohu from 2021: excludes D&A, so gross margin is slightly overstated
                                   "CostOfGoodsAndServiceExcludingDepreciationDepletionAndAmortization"]),
     "gross_profit":       ("IS", ["GrossProfit"]),
     "rd_expense":         ("IS", ["ResearchAndDevelopmentExpense",
@@ -34,7 +35,7 @@ METRICS = {
     "net_income":         ("IS", ["NetIncomeLoss", "ProfitLoss"]),
     "eps_diluted":        ("IS", ["EarningsPerShareDiluted"]),
     "shares_diluted":     ("IS", ["WeightedAverageNumberOfDilutedSharesOutstanding"]),
-    # ---- 資產負債表 ----
+    # ---- Balance sheet ----
     "cash":               ("BS", ["CashAndCashEquivalentsAtCarryingValue"]),
     "st_investments":     ("BS", ["MarketableSecuritiesCurrent", "AvailableForSaleSecuritiesDebtSecuritiesCurrent",
                                   "ShortTermInvestments"]),
@@ -50,7 +51,7 @@ METRICS = {
                                   "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest"]),
     "liab_and_equity":    ("BS", ["LiabilitiesAndStockholdersEquity"]),
     "goodwill":           ("BS", ["Goodwill"]),
-    # ---- 現金流量表 ----
+    # ---- Cash flow statement ----
     "operating_cash_flow":("CF", ["NetCashProvidedByUsedInOperatingActivities",
                                   "NetCashProvidedByUsedInOperatingActivitiesContinuingOperations"]),
     "capex":              ("CF", ["PaymentsToAcquirePropertyPlantAndEquipment", "PaymentsToAcquireProductiveAssets"]),
@@ -62,9 +63,9 @@ METRICS = {
 }
 
 
-# ---------------------------------------------------------------- 1. 擷取
+# ---------------------------------------------------------------- 1. Fetch
 def fetch_companyfacts(cik, headers, raw_dir, use_cache=True):
-    """抓 SEC companyfacts JSON；已經抓過就讀本機檔案（快取），不重複打 API。"""
+    """Download the SEC companyfacts JSON, or read the cached copy if it already exists."""
     cik10 = str(cik).zfill(10)
     raw_dir = Path(raw_dir)
     raw_dir.mkdir(parents=True, exist_ok=True)
@@ -74,15 +75,15 @@ def fetch_companyfacts(cik, headers, raw_dir, use_cache=True):
     url = f"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik10}.json"
     resp = requests.get(url, headers=headers, timeout=30)
     resp.raise_for_status()
-    time.sleep(0.3)  # SEC 限制每秒最多 10 次請求，禮貌性暫停
+    time.sleep(0.3)  # stay well under the SEC limit of 10 requests per second
     facts = resp.json()
     path.write_text(json.dumps(facts), encoding="utf-8")
     return facts
 
 
-# ---------------------------------------------------------------- 2. 攤平
+# ---------------------------------------------------------------- 2. Flatten
 def flatten(facts):
-    """巢狀 JSON → 長表格（和 Step 1 第 2 節一樣的四層迴圈）"""
+    """Nested JSON -> long table: one row per reported value."""
     rows = []
     for taxonomy, concepts in facts["facts"].items():
         for concept, info in concepts.items():
@@ -92,9 +93,9 @@ def flatten(facts):
     return pd.DataFrame(rows)
 
 
-# ---------------------------------------------------------------- 3. 清理
+# ---------------------------------------------------------------- 3. Clean
 def clean(df_raw):
-    """只留 10-K 年度資料、推算會計年度、去重（保留最新申報）"""
+    """Keep annual 10-K values, assign fiscal years, and keep the latest filing for restated values."""
     df = df_raw[(df_raw["taxonomy"] == "us-gaap") & (df_raw["form"].isin(["10-K", "10-K/A"]))].copy()
     for col in ["start", "end", "filed"]:
         if col not in df:
@@ -106,11 +107,11 @@ def clean(df_raw):
     is_annual_flow = (df["period_type"] == "flow") & df["duration_days"].between(350, 380)
     df = df[is_annual_flow | (df["period_type"] == "instant")].copy()
 
-    # 會計年度：年度結束在 6 月以後算當年，1~5 月結束算前一年
-    # 例：Onto 的 2021 年度結束在 2022-01-01 → 算 2021
+    # Fiscal year: periods ending in Jun-Dec belong to that calendar year, Jan-May to the prior year
+    # (e.g. Onto's FY2021 ended 2022-01-01)
     df["fiscal_year"] = df["end"].dt.year.where(df["end"].dt.month >= 6, df["end"].dt.year - 1)
 
-    # 年度結束日：用「任何一個營收候選標籤」的年度期間結束日當標準
+    # Keep balance-sheet values only at fiscal year-end dates (taken from annual revenue periods)
     rev_tags = METRICS["revenue"][1]
     fy_end_dates = set(df.loc[(df["period_type"] == "flow") & df["concept"].isin(rev_tags), "end"])
     df = df[(df["period_type"] == "flow") | df["end"].isin(fy_end_dates)].copy()
@@ -120,9 +121,9 @@ def clean(df_raw):
     return df
 
 
-# ---------------------------------------------------------------- 4. 對應指標
+# ---------------------------------------------------------------- 4. Map to metrics
 def map_metrics(df, metrics=METRICS):
-    """XBRL 標籤 → 分析指標；逐年使用第一個有資料的候選標籤"""
+    """Map XBRL tags to analysis metrics, using the first available candidate tag in each year."""
     records, report = [], []
     for metric, (statement, candidates) in metrics.items():
         sub = df[df["concept"].isin(candidates)].copy()
@@ -139,10 +140,10 @@ def map_metrics(df, metrics=METRICS):
 
 
 def add_derived(fin_long):
-    """缺值時用會計公式推算：
-    - 總負債 = 負債與權益合計 − 股東權益
-    - 毛利   = 營收 − 銷貨成本
-    - 管銷費用 = 銷售費用 + 管理費用（有些公司把兩者分開申報，例如 Onto）
+    """Fill missing metrics with accounting identities:
+    - total liabilities = liabilities and equity - stockholders' equity
+    - gross profit      = revenue - cost of revenue
+    - SG&A              = selling & marketing + G&A (for filers that report them separately, e.g. Onto)
     """
     wide = fin_long.pivot_table(index="fiscal_year", columns="metric", values="val")
     raw = fin_long.pivot_table(index="fiscal_year", columns="concept", values="val")
@@ -164,19 +165,19 @@ def add_derived(fin_long):
     return pd.concat([fin_long] + adds, ignore_index=True) if adds else fin_long
 
 
-# ---------------------------------------------------------------- 5. 一次跑完
+# ---------------------------------------------------------------- 5. End-to-end
 def build_company(ticker, cik, headers, raw_dir="data/raw", n_years=10, use_cache=True):
-    """擷取 → 攤平 → 清理 → 對應 → 推算，回傳 (長表格, 對應報告)"""
+    """Fetch -> flatten -> clean -> map -> derive. Returns (long table, tag-mapping report)."""
     facts = fetch_companyfacts(cik, headers, raw_dir, use_cache)
     df = clean(flatten(facts))
     fin_long, report = map_metrics(df)
-    # 管銷費用的兩個組成項目，先放進來給 add_derived 用，算完再移除
+    # temporarily include the SG&A components so add_derived can sum them
     parts = df[df["concept"].isin(["SellingAndMarketingExpense", "GeneralAndAdministrativeExpense"])
                & (df["period_type"] == "flow")].assign(metric="_sga_part", statement="IS")
     fin_long = add_derived(pd.concat([fin_long, parts], ignore_index=True))
     fin_long = fin_long[fin_long["metric"] != "_sga_part"]
 
-    # 更新檢查報告：用公式補上的指標標記為 derived
+    # flag metrics filled by an identity as 'derived' in the report
     derived = set(fin_long.loc[fin_long["concept"] == "derived", "metric"])
     report.loc[(report["status"] == "missing") & report["metric"].isin(derived), "status"] = "derived"
 
