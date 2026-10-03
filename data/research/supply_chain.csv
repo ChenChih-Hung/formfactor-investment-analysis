@@ -1,0 +1,14 @@
+tier,role,name,detail,source,source_url
+Upstream,Materials & components,Ceramic and organic substrates,Sole or limited source; purchase orders rather than long-term contracts,FORM FY2025 10-K,https://investors.formfactor.com/static-files/f533947f-8aa6-4043-9dde-35c31aac81f0
+Upstream,Materials & components,Complex printed circuit boards,Sole or limited source; some minimum order quantities,FORM FY2025 10-K,https://investors.formfactor.com/static-files/f533947f-8aa6-4043-9dde-35c31aac81f0
+Upstream,Materials & components,Contact elements and interconnects,Sole or limited source,FORM FY2025 10-K,https://investors.formfactor.com/static-files/f533947f-8aa6-4043-9dde-35c31aac81f0
+Company,Probe card manufacturing,FormFactor - Livermore CA & Beaverton OR,Primary probe card facilities,FORM FY2025 10-K,https://investors.formfactor.com/static-files/f533947f-8aa6-4043-9dde-35c31aac81f0
+Company,Systems manufacturing,FormFactor - Boulder CO; Thiendorf / Munich / Karlsruhe Germany,"Probe stations, thermal and cryogenic systems",FORM FY2025 10-K,https://investors.formfactor.com/static-files/f533947f-8aa6-4043-9dde-35c31aac81f0
+Competitor,Probe cards,Technoprobe; Micronics Japan; Japan Electronic Materials; MPI; Korea Instrument; STAr Technologies; Max One; TSE,Named probe card competitors,FORM FY2025 10-K,https://investors.formfactor.com/static-files/f533947f-8aa6-4043-9dde-35c31aac81f0
+Competitor,Probe stations,MPI; Semishare; STAr Technologies; Tokyo Electron; Wentworth Laboratories,Named systems competitors,FORM FY2025 10-K,https://investors.formfactor.com/static-files/f533947f-8aa6-4043-9dde-35c31aac81f0
+Downstream,Customer (DRAM / HBM),SK hynix,Largest customer in FY2025 (about 22.9% of revenue),FORM FY2025 10-K,https://investors.formfactor.com/static-files/f533947f-8aa6-4043-9dde-35c31aac81f0
+Downstream,Customer (Foundry & Logic),Intel,Over 10% of revenue in parts of 2024-2025,FORM FY2025 10-K,https://investors.formfactor.com/static-files/f533947f-8aa6-4043-9dde-35c31aac81f0
+Downstream,Customer (Foundry),TSMC,Over 10% of revenue in at least one 2025 quarter,FORM FY2025 10-K,https://investors.formfactor.com/static-files/f533947f-8aa6-4043-9dde-35c31aac81f0
+Downstream,Customer (Memory),Samsung,Over 10% of revenue in at least one 2024 quarter,FORM FY2025 10-K,https://investors.formfactor.com/static-files/f533947f-8aa6-4043-9dde-35c31aac81f0
+End market,Demand driver,HBM for AI accelerators,"Stacks of 8, 12 or 16 DRAM dies; each die tested at wafer level",FORM FY2025 10-K,https://investors.formfactor.com/static-files/f533947f-8aa6-4043-9dde-35c31aac81f0
+End market,Demand driver,Co-packaged optics,Lab-to-fab transition; Keystone Photonics acquisition,FORM FY2025 10-K and Q4 2025 earnings release,https://www.globenewswire.com/news-release/2026/02/04/3232457/0/en/FormFactor-Inc-Reports-2025-Fourth-Quarter-Results.html

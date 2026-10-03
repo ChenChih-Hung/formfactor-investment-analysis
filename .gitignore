@@ -1,0 +1,15 @@
+# Raw SEC API responses (large, re-downloaded / cached automatically by the notebooks)
+data/raw/
+
+# SQLite database (rebuilt by running the notebooks in order)
+*.db
+
+# Python / Jupyter clutter
+__pycache__/
+.ipynb_checkpoints/
+anaconda_projects/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini

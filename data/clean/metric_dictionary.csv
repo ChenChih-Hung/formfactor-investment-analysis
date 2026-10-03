@@ -1,0 +1,29 @@
+metric,statement,xbrl_candidates
+revenue,IS,RevenueFromContractWithCustomerExcludingAssessedTax | Revenues | SalesRevenueNet
+cost_of_revenue,IS,CostOfRevenue | CostOfGoodsAndServicesSold | CostOfGoodsSold
+gross_profit,IS,GrossProfit
+rd_expense,IS,ResearchAndDevelopmentExpense
+sga_expense,IS,SellingGeneralAndAdministrativeExpense
+operating_income,IS,OperatingIncomeLoss
+income_tax,IS,IncomeTaxExpenseBenefit
+net_income,IS,NetIncomeLoss
+eps_diluted,IS,EarningsPerShareDiluted
+shares_diluted,IS,WeightedAverageNumberOfDilutedSharesOutstanding
+cash,BS,CashAndCashEquivalentsAtCarryingValue
+st_investments,BS,MarketableSecuritiesCurrent | AvailableForSaleSecuritiesDebtSecuritiesCurrent | ShortTermInvestments
+accounts_receivable,BS,AccountsReceivableNetCurrent
+inventory,BS,InventoryNet
+current_assets,BS,AssetsCurrent
+total_assets,BS,Assets
+current_liabilities,BS,LiabilitiesCurrent
+total_liabilities,BS,Liabilities
+long_term_debt,BS,LongTermDebtNoncurrent | LongTermDebt
+total_equity,BS,StockholdersEquity
+liab_and_equity,BS,LiabilitiesAndStockholdersEquity
+goodwill,BS,Goodwill
+operating_cash_flow,CF,NetCashProvidedByUsedInOperatingActivities
+capex,CF,PaymentsToAcquirePropertyPlantAndEquipment
+depreciation,CF,Depreciation | DepreciationDepletionAndAmortization | DepreciationAmortizationAndAccretionNet
+stock_comp,CF,ShareBasedCompensation | AllocatedShareBasedCompensationExpense
+buybacks,CF,PaymentsForRepurchaseOfCommonStock
+acquisitions,CF,PaymentsToAcquireBusinessesNetOfCashAcquired

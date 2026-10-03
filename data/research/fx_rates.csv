@@ -1,0 +1,21 @@
+currency,year,units_per_usd,source,source_url
+USD,2021,1,Base currency,
+USD,2022,1,Base currency,
+USD,2023,1,Base currency,
+USD,2024,1,Base currency,
+USD,2025,1,Base currency,
+EUR,2021,0.846,IRS yearly average currency exchange rates,https://www.irs.gov/individuals/international-taxpayers/yearly-average-currency-exchange-rates
+EUR,2022,0.951,IRS yearly average currency exchange rates,https://www.irs.gov/individuals/international-taxpayers/yearly-average-currency-exchange-rates
+EUR,2023,0.924,IRS yearly average currency exchange rates,https://www.irs.gov/individuals/international-taxpayers/yearly-average-currency-exchange-rates
+EUR,2024,0.924,IRS yearly average currency exchange rates,https://www.irs.gov/individuals/international-taxpayers/yearly-average-currency-exchange-rates
+EUR,2025,0.886,IRS yearly average currency exchange rates,https://www.irs.gov/individuals/international-taxpayers/yearly-average-currency-exchange-rates
+JPY,2021,109.817,IRS yearly average currency exchange rates,https://www.irs.gov/individuals/international-taxpayers/yearly-average-currency-exchange-rates
+JPY,2022,131.454,IRS yearly average currency exchange rates,https://www.irs.gov/individuals/international-taxpayers/yearly-average-currency-exchange-rates
+JPY,2023,140.511,IRS yearly average currency exchange rates,https://www.irs.gov/individuals/international-taxpayers/yearly-average-currency-exchange-rates
+JPY,2024,151.353,IRS yearly average currency exchange rates,https://www.irs.gov/individuals/international-taxpayers/yearly-average-currency-exchange-rates
+JPY,2025,149.632,IRS yearly average currency exchange rates,https://www.irs.gov/individuals/international-taxpayers/yearly-average-currency-exchange-rates
+TWD,2021,27.932,IRS yearly average currency exchange rates,https://www.irs.gov/individuals/international-taxpayers/yearly-average-currency-exchange-rates
+TWD,2022,29.813,IRS yearly average currency exchange rates,https://www.irs.gov/individuals/international-taxpayers/yearly-average-currency-exchange-rates
+TWD,2023,31.160,IRS yearly average currency exchange rates,https://www.irs.gov/individuals/international-taxpayers/yearly-average-currency-exchange-rates
+TWD,2024,32.117,IRS yearly average currency exchange rates,https://www.irs.gov/individuals/international-taxpayers/yearly-average-currency-exchange-rates
+TWD,2025,31.167,IRS yearly average currency exchange rates,https://www.irs.gov/individuals/international-taxpayers/yearly-average-currency-exchange-rates
