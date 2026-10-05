@@ -1,0 +1,14 @@
+as_of,item,value,unit,source,source_url
+2026-10-02,Share price,149.15,USD,stockanalysis.com statistics,https://stockanalysis.com/stocks/form/statistics/
+2026-10-02,Market cap,11.65,USD bn,stockanalysis.com statistics,https://stockanalysis.com/stocks/form/statistics/
+2026-10-02,Enterprise value,11.34,USD bn,stockanalysis.com statistics,https://stockanalysis.com/stocks/form/statistics/
+2026-10-02,Shares outstanding,78.12,m,stockanalysis.com statistics,https://stockanalysis.com/stocks/form/statistics/
+2026-10-02,P/E (trailing),102.88,x,stockanalysis.com statistics,https://stockanalysis.com/stocks/form/statistics/
+2026-10-02,P/E (forward),43.23,x,stockanalysis.com statistics,https://stockanalysis.com/stocks/form/statistics/
+2026-10-02,EV / sales,12.56,x,stockanalysis.com statistics,https://stockanalysis.com/stocks/form/statistics/
+2026-10-02,52-week price change,285.3,%,stockanalysis.com statistics,https://stockanalysis.com/stocks/form/statistics/
+2026-10-02,Average analyst price target,138.63,USD,stockanalysis.com statistics,https://stockanalysis.com/stocks/form/statistics/
+2026-08-04,Q3 2026 revenue guidance midpoint,270,USD m,FormFactor Q2 2026 earnings release,https://www.sec.gov/Archives/edgar/data/1039399/000103939926000030/ex9901-earningsreleasexq226.htm
+2026-08-04,2026 capex guidance low,140,USD m,FormFactor Q2 2026 earnings call,https://finance.yahoo.com/markets/stocks/articles/formfactor-q2-earnings-call-highlights-220357627.html
+2026-08-04,2026 capex guidance high,170,USD m,FormFactor Q2 2026 earnings call,https://finance.yahoo.com/markets/stocks/articles/formfactor-q2-earnings-call-highlights-220357627.html
+2026-08-04,Q2 2026 non-GAAP operating income,72.0,USD m,FormFactor Q2 2026 earnings release,https://www.sec.gov/Archives/edgar/data/1039399/000103939926000030/ex9901-earningsreleasexq226.htm

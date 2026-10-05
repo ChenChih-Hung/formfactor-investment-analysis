@@ -1,0 +1,7 @@
+period,label,nongaap_gross_margin_pct,one_time_pts,is_guidance,source,source_url
+2025Q2,Q2 2025,38.5,0,0,FormFactor Q2 2026 earnings release (prior-year column),https://www.sec.gov/Archives/edgar/data/1039399/000103939926000030/ex9901-earningsreleasexq226.htm
+2025Q3,Q3 2025,41.0,0,0,FormFactor Q4 2025 earnings release (prior-quarter comparison),https://www.globenewswire.com/news-release/2026/02/04/3232457/0/en/FormFactor-Inc-Reports-2025-Fourth-Quarter-Results.html
+2025Q4,Q4 2025,43.9,0,0,FormFactor Q4 2025 earnings release,https://www.globenewswire.com/news-release/2026/02/04/3232457/0/en/FormFactor-Inc-Reports-2025-Fourth-Quarter-Results.html
+2026Q1,Q1 2026,49.0,0,0,FormFactor Q2 2026 earnings release (prior-quarter column),https://www.sec.gov/Archives/edgar/data/1039399/000103939926000030/ex9901-earningsreleasexq226.htm
+2026Q2,Q2 2026,53.3,2.3,0,"FormFactor Q2 2026 earnings release; normalized ~51% per Q2 2026 call (one-third of sequential gain non-recurring: tariff refunds, precious-metal recovery)",https://finance.yahoo.com/markets/stocks/articles/formfactor-q2-earnings-call-highlights-220357627.html
+2026Q3,Q3 2026 (guidance),54.0,3.0,1,FormFactor Q2 2026 earnings release and call (guidance 54% +/-1.5%; tariff refunds ~300 bps),https://finance.yahoo.com/markets/stocks/articles/formfactor-q2-earnings-call-highlights-220357627.html

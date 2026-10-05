@@ -4,6 +4,19 @@ An end-to-end equity research project on **FormFactor**, a U.S. leader in semico
 
 **Author:** Chen-Chih (Cosby) Hung — MS in Business Analytics candidate, University of Illinois Urbana-Champaign
 
+📄 **Research note (PDF, October 2026):** [FormFactor_Research_Note.pdf](report/FormFactor_Research_Note.pdf)
+
+## Current view (October 2026): Cautious
+
+**The turnaround is real. The price assumes it is permanent.**
+
+- **2026 changed the margin picture.** Q2 2026 revenue grew 31.9% year over year to a record $258M; non-GAAP gross margin rose from 38.5% (Q2 2025) to 53.3%, and GAAP operating margin reached 22%.
+- **Part of it will not repeat.** Management puts normalized gross margin near 51%; Q3 guidance of 54% includes about 3 points of tariff refunds.
+- **Investment is rising again.** 2026 capex is guided to $140–170M for a new Texas facility, after a record $104M in 2025.
+- **The valuation assumes the best case.** At $149.15 (Oct 2, 2026) the shares trade at 43x forward earnings, above the $139 average analyst target. In illustrative 2027 scenarios only the bull case (revenue ≈ $1.4B at a 30% operating margin) supports the current price.
+
+<p align="center"><img src="data/analysis/gm_turnaround.png" width="70%"></p>
+
 ---
 
 ## What this project demonstrates
@@ -11,7 +24,7 @@ An end-to-end equity research project on **FormFactor**, a U.S. leader in semico
 | Area | Skills |
 |---|---|
 | Data extraction | SEC EDGAR XBRL API (`companyfacts`), `requests`, JSON parsing, caching |
-| Data cleaning | 10-K filtering, 52/53-week fiscal year alignment, restatement handling, de-duplication, tag fallbacks |
+| Data cleaning | 10-K filtering, 52/53-week fiscal year alignment, restatement handling, de-duplication, tag fallbacks, quarterly values derived from 10-Q year-to-date figures |
 | Data modeling | SQLite star schema (fact + dimension tables), primary keys, views, idempotent loads |
 | SQL | `CASE WHEN` pivots, window functions (`LAG`, `ROW_NUMBER`, `RANK`, `FIRST_VALUE`, `SUM() OVER`), CTEs, self-joins, multi-key joins, `UNION ALL` |
 | Python | pandas, reusable ETL module (`sec_etl.py`), matplotlib |
@@ -20,7 +33,7 @@ An end-to-end equity research project on **FormFactor**, a U.S. leader in semico
 ## Pipeline
 
 ```
-SEC EDGAR API ──► raw JSON ──► clean long table ──► CSV ──► SQLite ──► SQL views ──► ratios, peer & market analysis ──► charts
+SEC EDGAR API (10-K, 10-Q) ──► raw JSON ──► clean long table ──► CSV ──► SQLite ──► SQL views ──► ratios, peer & market analysis ──► charts ──► research note
                                                          ▲
                           manually collected research data (10-K, earnings releases, FX rates) with source column
 ```
@@ -32,7 +45,9 @@ SEC EDGAR API ──► raw JSON ──► clean long table ──► CSV ──
 ├── 02_sql_analysis.ipynb       Step 2  Load into SQLite, compute financial ratios with SQL
 ├── 03_peer_comparison.ipynb    Step 3a Peer benchmarking vs Teradyne, Cohu, Onto Innovation, Kulicke & Soffa
 ├── 04_market_structure.ipynb   Step 3b Revenue mix, segment margins, probe-card market share, supply chain
+├── 05_quarterly_update.ipynb   Step 4  Quarterly 10-Q data, 2026 margin turnaround, valuation scenarios
 ├── sec_etl.py                  Reusable ETL functions (fetch → flatten → clean → map → derive)
+├── report/                     Research note (PDF)
 ├── data/
 │   ├── clean/                  Cleaned financial statements (long and wide CSV)
 │   ├── research/               Manually collected market data, every row with its source
@@ -47,9 +62,11 @@ pip install -r requirements.txt
 jupyter notebook
 ```
 
-Run the notebooks in order (01 → 04). The SEC requires a `User-Agent` header with a name and email; replace the `HEADERS` value in notebooks 01 and 03 with your own. Raw SEC responses are cached in `data/raw/` and the SQLite database is rebuilt by the notebooks, so neither is committed.
+Run the notebooks in order (01 → 05). The SEC requires a `User-Agent` header with a name and email; replace the `HEADERS` value in notebooks 01 and 03 with your own. Raw SEC responses are cached in `data/raw/` and the SQLite database is rebuilt by the notebooks, so neither is committed.
 
-## Key findings
+## Key findings (historical analysis through FY2025)
+
+These findings describe FormFactor through its FY2025 10-K. Several were overtaken by the 2026 recovery above, which is why the analysis was extended to quarterly data.
 
 **1. Revenue is the most stable in its peer group, but profitability lags.**
 FormFactor's revenue grew from $589.5M (2019) to $785.0M (2025). In the 2023 downturn its revenue fell 11.3%, the smallest decline among five U.S.-listed test and packaging peers (Teradyne −15.2%, Onto −18.8%, Cohu −21.7%, Kulicke & Soffa −50.6%).
@@ -88,6 +105,7 @@ DRAM grew from $114M (17.2% of revenue) in 2023 to $309M (34.3%) in the twelve m
 - FormFactor 10-K (FY2023, FY2025), 10-Q (six months ended July 1, 2023) and Q4 2023 / Q4 2025 earnings releases
 - Technoprobe FY2025 results release; Micronics Japan FY2025 consolidated results; Chunghwa Precision Test 2025 revenue (Economic Daily News)
 - IRS yearly average currency exchange rates
+- FormFactor Q2 2026 earnings release and call; market data from stockanalysis.com (as of Oct 2, 2026)
 - Mordor Intelligence probe card market report (market size estimate)
 
 ## Limitations
@@ -100,4 +118,5 @@ DRAM grew from $114M (17.2% of revenue) in 2023 to $309M (34.3%) in the twelve m
 ## Next steps
 
 - Technology analysis: MEMS and vertical probe roadmaps, HBM and advanced-packaging test challenges, co-packaged optics testing
-- Integrated investment report with recommendation
+- Full DCF model with explicit capex and working-capital assumptions
+- Competitors' 2026 results, to test whether FormFactor is regaining probe-card share
