@@ -2,7 +2,7 @@
 
 An end-to-end equity research project on **FormFactor**, a U.S. leader in semiconductor wafer probe cards, built as a hands-on exercise in financial data engineering and analysis: pulling raw filings from the SEC, cleaning them, modeling them in SQL, and turning the numbers into an investment view.
 
-**Author:** Chen-Chih (Cosby) Hung — MS in Business Analytics candidate, University of Illinois Urbana-Champaign
+**Author:** Chen-Chih (Cosby) Hung — MS in Business Analytics, University of Illinois Urbana-Champaign
 
 📄 **Research note (PDF, October 2026):** [FormFactor_Research_Note.pdf](report/FormFactor_Research_Note.pdf)
 
